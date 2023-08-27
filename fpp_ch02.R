@@ -1,21 +1,31 @@
 library(fpp2)
 library(ggplot2)
 
-y <- ts(c(123,39,78,52,110), start=2012)
+y <- ts(c(123,39,78,52,110), start = 2012)
 y
 
 
 z <- c(123,39,78,52,110)
-y <- ts(z, start=2003, frequency=12)
+y <- ts(z, start = 2003, frequency = 12)
 y
 
-
+data("melsyd")
+?melsyd
+str(melsyd)
+head(melsyd)
+tail(melsyd)
 autoplot(melsyd[,"Economy.Class"]) +
   ggtitle("Economy class passengers: Melbourne-Sydney") +
   xlab("Year") +
   ylab("Thousands")
 
 
+data(a10)
+?a10
+frequency(a10)
+str(a10)
+head(a10)
+tail(a10)
 autoplot(a10) +
   ggtitle("Antidiabetic drug sales") +
   ylab("$ million") +
@@ -37,32 +47,49 @@ ggsubseriesplot(a10) +
   ggtitle("Seasonal subseries plot: antidiabetic drug sales")
 
 
-
-autoplot(elecdemand[,c("Demand","Temperature")], facets=TRUE) +
+data("elecdemand")
+?elecdemand
+str(elecdemand)
+head(elecdemand)
+tail(elecdemand)
+autoplot(elecdemand[,c("Demand","Temperature")], facets = TRUE) +
   xlab("Year: 2014") + ylab("") +
   ggtitle("Half-hourly electricity demand: Victoria, Australia")
 
 
 
-qplot(Temperature, Demand, data=as.data.frame(elecdemand)) +
+qplot(Temperature, Demand, data = as.data.frame(elecdemand)) +
   ylab("Demand (GW)") + xlab("Temperature (Celsius)")
 
 
-autoplot(visnights[,1:5], facets=TRUE) +
+data("visnights")
+?visnights
+str(visnights)
+head(visnights)
+tail(visnights)
+autoplot(visnights[,1:5], facets = TRUE) +
   ylab("Number of visitor nights each quarter (millions)")
 
 
 GGally::ggpairs(as.data.frame(visnights[,1:5]))
 
-
-beer2 <- window(ausbeer, start=1992)
+data("ausbeer")
+?ausbeer
+str(ausbeer)
+head(ausbeer)
+tail(ausbeer)
+beer2 <- window(ausbeer, start = 1992)
 gglagplot(beer2)
 
 
 ggAcf(beer2)
 
-
-aelec <- window(elec, start=1980)
+data(elec)
+?elec
+str(elec)
+head(elec)
+tail(elec)
+aelec <- window(elec, start = 1980)
 autoplot(aelec) + xlab("Year") + ylab("GWh")
 
 
@@ -75,5 +102,4 @@ autoplot(y) + ggtitle("White noise")
 
 
 ggAcf(y)
-
 
