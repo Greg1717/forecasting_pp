@@ -103,3 +103,7 @@ autoplot(y) + ggtitle("White noise")
 
 ggAcf(y)
 
+
+
+
+
