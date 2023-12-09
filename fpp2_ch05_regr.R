@@ -7,7 +7,7 @@ library(forecast)
 
 data(uschange)
 
-autoplot(uschange, facet=TRUE)
+autoplot(uschange, facet = TRUE)
 
 autoplot(uschange[,c("Consumption","Income")]) +
   ylab("% change") + xlab("Year")
@@ -24,7 +24,6 @@ uschange %>%
 tslm(Consumption ~ Income, data = uschange)
 
 ## Multiple linear regression =========
-
 # Each of the predictor variables must be numerical.
 
 uschange %>%
@@ -94,13 +93,9 @@ gridExtra::grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 
 ## Residual plots against fitted values =====
-
 # A plot of the residuals against the fitted values should also show no pattern. If a pattern is observed, there may be “heteroscedasticity” in the errors which means that the variance of the residuals may not be constant. If this problem occurs, a transformation of the forecast variable such as a logarithm or square root may be required
-
 
 cbind(Fitted = fitted(fit.consMR),
       Residuals = residuals(fit.consMR)) %>%
   as.data.frame() %>%
   ggplot(aes(x = Fitted, y = Residuals)) + geom_point()
-
-
