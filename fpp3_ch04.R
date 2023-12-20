@@ -1,6 +1,8 @@
 library(fpp3)
-
+# 4 Time Series Features ========================================================
+## 4.1 Some Simple Statistics =================================================
 data("tourism")
+tourism
 ?features
 ?features_by_tag
 ?features_by_pkg
@@ -9,24 +11,25 @@ tourism |>
   features(Trips, list(mean = mean)) |>
   arrange(mean)
 
-tourism
-
 tourism |> features(Trips, quantile)
 
+## 4.2 ACF features ===========================================================
 tourism |> features(Trips, feat_acf)
 
+## 4.2 STL features ===========================================================
 tourism |>
   features(Trips, feat_stl)
 
 tourism |>
   features(Trips, feat_stl) |>
-  ggplot(aes(x = trend_strength, y = seasonal_strength_year,
+  ggplot(aes(x = trend_strength,
+             y = seasonal_strength_year,
              col = Purpose)) +
   geom_point() +
   facet_wrap(vars(State))
 
 
-# strongest trends ============================================================
+### strongest trends ==========================================================
 # Clearly, holiday series are most seasonal which is unsurprising. The strongest trends tend to be in Western Australia and Victoria. The most seasonal series can also be easily identified and plotted.
 
 tourism |>
@@ -39,18 +42,19 @@ tourism |>
   geom_line() +
   facet_grid(vars(State, Region, Purpose))
 
-
-# compute ALL pkg-features ====================================================
+## 4.5 All Pkg-features =======================================================
 # All of the features included in the feasts package can be computed in one line like this.
 
 tourism_features <- tourism |>
   features(Trips, feature_set(pkgs = "feasts"))
+
 tourism_features
 
 # We’ve already seen how we can plot one feature against another (Section 4.3). We can also do pairwise plots of groups of features. In Figure 4.3, for example, we show all features that involve seasonality, along with the Purpose variable.
 
-# features - ggpairs() ========================================================
+### features - ggpairs() ========================================================
 library(glue)
+
 tourism_features |>
   select_at(vars(contains("season"), Purpose)) |>
   mutate(
@@ -63,7 +67,7 @@ tourism_features |>
   ) |>
   GGally::ggpairs(mapping = aes(colour = Purpose))
 
-# PCA =========================================================================
+### PCA =======================================================================
 # We can compute the principal components of the tourism features as follows.
 library(broom)
 
@@ -81,13 +85,14 @@ pcs |>
   geom_point() +
   theme(aspect.ratio = 1)
 
-## plot outliers PC1 > 10 =======
+### plot outliers PC1 > 10 =======
 outliers <- pcs |>
   filter(.fittedPC1 > 10) |>
   select(Region, State, Purpose, .fittedPC1, .fittedPC2)
 
 outliers
 
+# Four anomalous time series from the Australian tourism data.
 outliers |>
   left_join(tourism, by = c("State", "Region", "Purpose"), multiple = "all") |>
   mutate(Series = glue("{State}", "{Region}", "{Purpose}", .sep = "\n\n")) |>
